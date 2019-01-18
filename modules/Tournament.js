@@ -1,16 +1,17 @@
 import Player from "./Player";
 import Options from "./Options";
-import Bracket from "./Bracket";
+import Match from "./Match";
 
 export default class Tournament {
-    constructor(players, options) {
+    constructor(players, options, id_tournament) {
         this.players = [];
         for (player in players) {
             this.addPlayer(player);
         }
         this.options = new Options(options);
-        this.brackets = [];
-        this.nbBrackets = 0;
+        this.Matches = [];
+        this.nbMatchs = 0;
+        this.id_tournament = document.getElementById(id_tournament);
     }
 
     addPlayer(player) {
@@ -18,21 +19,21 @@ export default class Tournament {
     }
 
     display() {
-        for (bracket in this.brackets) {
-            bracket.display(this.options);
+        for (Match in this.Matches) {
+            Match.display(this.options);
         }
     }
 
-    createBracket() {
-        //on doit calculer le nb de bracket necessaire
-        this.nbBrackets = this.calcNbBracket();
-        //on push autant de bracket que necessaire
-        for (let i = 0; i < this.nbBrackets; i++){
-            this.brackets.push(new Bracket(/*firstPlayer, secondPlayer, options*/));
+    createMatch() {
+        //on doit calculer le nb de Match necessaire
+        this.nbMatches = this.calcNbMatch();
+        //on push autant de Match que necessaire
+        for (let i = 0; i < this.nbMatches; i++){
+            this.Matchs.push(new Match(/*firstPlayer, secondPlayer, options*/));
         }
     }
 
-    calcNbBracket() {
-        //on calcule le nb de bracket en fonction du nb de joueurs
+    calcNbMatch() {
+        //on calcule le nb de Match en fonction du nb de joueurs
     }
 };
