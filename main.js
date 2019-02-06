@@ -28,11 +28,13 @@ players.onsubmit = function (e) {
       return false;
     }
   }
-  tournament.setPlayers(e)
-  console.log(tournament.players)
+
+  // TODO : vérifier si les champs sont des texts
+  tournament.buildTournament(e)
+  console.log(tournament)
   //tournament.createBracket() // TODO
   return false
 };
 
 
-console.log(tournament)
+

@@ -1,6 +1,6 @@
 import Player from './Player.js'
 import Options from './Options.js'
-import Bracket from './Match.js'
+import Bracket from './Bracket.js'
 import Form  from './Form.js'
 
 export default class Tournament {
@@ -8,7 +8,11 @@ export default class Tournament {
 
     this.players = []
 
-    this.options = new Options(options)
+    this.options = {
+      score : false,
+      type : "classique"
+    }
+
     this.brackets = []
     this.nbBrackets = 0
 
@@ -25,38 +29,45 @@ export default class Tournament {
   }
 
   /**
-   * Fonction utilisée pour construire le tableau de joueur
+   * Fonction utilisée pour construire le tournoi
    * à partir des inputs du formulaire
    * @param {e} target html
    */
-  setPlayers(e){
+  buildTournament(e){
+
+    // On sait que le premier input est le type de tournoi
+    this.options.type = e.target[0].value
+    this.options.score = e.target[1].checked
 
     // Pour chaque input, on ajoute le joueur en question
-    for (let index = 0; index < e.target.length-1; index++) {
+    for (let index = 2; index < e.target.length-1; index++) {
 
       this.addPlayer({
-        id : index,
+        id : index-2,
         name : e.target[index].value
       })
     }
   }
 
-    display() {
-        for (Match in this.Matches) {
-            Match.display(this.options);
-        }
+  display() {
+    for (bracket in this.brackets) {
+      bracket.display(this.options)
     }
+  }
 
-    createMatch() {
-        //on doit calculer le nb de Match necessaire
-        this.nbMatches = this.calcNbMatch();
-        //on push autant de Match que necessaire
-        for (let i = 0; i < this.nbMatches; i++){
-            this.Matchs.push(new Match(/*firstPlayer, secondPlayer, options*/));
-        }
+  createBracket() {
+    //on doit calculer le nb de bracket necessaire
+    this.nbBrackets = this.calcNbBracket()
+    //on push autant de bracket que necessaire
+    for (let i = 0; i < this.nbBrackets; i++) {
+      this.brackets.push(new Bracket(/*firstPlayer, secondPlayer, options*/))
     }
+  }
 
-    calcNbMatch() {
-        //on calcule le nb de Match en fonction du nb de joueurs
-    }
-};
+  calcNbBracket() {
+    //on calcule le nb de bracket en fonction du nb de joueurs
+  }
+
+
+
+}
