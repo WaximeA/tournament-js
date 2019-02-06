@@ -3,4 +3,8 @@ export default class Player {
         this.id = id;
         this.name = name;
     }
+
+    display() {
+
+    }
 }
