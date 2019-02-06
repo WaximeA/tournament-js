@@ -1,6 +1,5 @@
 import Player from './Player.js'
 import Options from './Options.js'
-import Bracket from './Bracket.js'
 import Form  from './Form.js'
 
 export default class Tournament {

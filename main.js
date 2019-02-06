@@ -22,7 +22,7 @@ let players = document.getElementById("players")
 
 players.onsubmit = function (e) {
   // TODO : vérifier si les champs sont des texts
-  for (let index = 0; index < e.target.length-1; index++) {
+  for (let index = 2; index < e.target.length-1; index++) {
     if(e.target[index].value !== ""){
       alert("Un ou plusieurs joueurs n'ont pas de nom...");
       return false;
