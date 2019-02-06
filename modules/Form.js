@@ -27,12 +27,27 @@ export default class Form {
         this.formNblayers.innerHTML = ""
         // On change le nom du formulaire
 
+        // On ajoute le select pour le type de tournoi
+        let div = document.createElement('div');
+        let select = document.createElement('select');
+        select.innerHTML += `<option value="classique"> -- Choisir un type de tournoi -- </option><option value="classique"> Classique </option><option value="poule"> Poule </option><option value="suisse"> Suisse </option>`;
+        div.appendChild(select);
+        this.formPlayers.appendChild(div);
+
+        div = document.createElement('div');
+        div.innerHTML += `<label>Avec Score</label>`;
+        let score = document.createElement('input');
+        score.type = 'checkbox'
+        score.value = '1'
+        div.appendChild(score);
+        this.formPlayers.appendChild(div);
+
         for (let index = 0; index < nb; index++) {
           let div = document.createElement('div');
           let input = document.createElement('input');
           input.type = 'text';
           // On lui met comme nom players + l'id du tableau
-          input.setAttribute('name', `players[${index}]`);
+          input.setAttribute('name', `players[${index+1}]`);
           input.setAttribute('placeholder', `Nom du joueur ${index+1}`);
 
           // On ajoute tout ça au formulaire

@@ -16,14 +16,16 @@ formNbPlayers.onsubmit = function(){
 
 let players = document.getElementById("players")
 
+console.log(players)
+
 players.onsubmit = function(e){
 
   // TODO : vérifier si les champs sont des texts
-  tournament.setPlayers(e)
-  console.log(tournament.players)
+  tournament.buildTournament(e)
+  console.log(tournament)
   //tournament.createBracket() // TODO
   return false
 };
 
 
-console.log(tournament)
+

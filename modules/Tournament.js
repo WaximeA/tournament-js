@@ -8,7 +8,11 @@ export default class Tournament {
 
     this.players = []
 
-    this.options = new Options(options)
+    this.options = {
+      score : false,
+      type : "classique"
+    }
+
     this.brackets = []
     this.nbBrackets = 0
 
@@ -25,17 +29,21 @@ export default class Tournament {
   }
 
   /**
-   * Fonction utilisée pour construire le tableau de joueur
+   * Fonction utilisée pour construire le tournoi
    * à partir des inputs du formulaire
    * @param {e} target html
    */
-  setPlayers(e){
+  buildTournament(e){
+
+    // On sait que le premier input est le type de tournoi
+    this.options.type = e.target[0].value
+    this.options.score = e.target[1].checked
 
     // Pour chaque input, on ajoute le joueur en question
-    for (let index = 0; index < e.target.length-1; index++) {
+    for (let index = 2; index < e.target.length-1; index++) {
 
       this.addPlayer({
-        id : index,
+        id : index-2,
         name : e.target[index].value
       })
     }
