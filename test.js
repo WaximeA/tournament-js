@@ -26,10 +26,12 @@ let closestKnownBracket = knownBrackets.find(function (elem) {
     return elem >= nbJoueur;
 });
 let matches = [];
+//l'id des matchs sera différents entre tous les matchs jusqu'à la finale
 let idMatch = 0;
 let previousM1 = null;
 let previousM2 = null;
 let previousRoundNbMatch = null;
+//cette boucle permet de créer le bon nombre de match à chaque fois, en divisant par deux le nombre de match à chaque nouveau round
 for (i = closestKnownBracket; i !== 1; i = i / 2) {
     let previousRound = null;
     if (nbRound !== 1) {
@@ -37,14 +39,20 @@ for (i = closestKnownBracket; i !== 1; i = i / 2) {
     }
     let noMatch = 1;
     matches[nbRound] = [];
+
+    //la construction du premier round est différente puisqu'on utilise la liste des joueurs et pas la liste des matchs précédents
     if (nbRound === 1) {
+
+        //Création des matchs en 1v1 -> on fait +2 à chaque itération pour récupèrer deux joueurs
         for (let t = 0; t < i; t += 2) {
             let joueur1 = null;
             let joueur2 = null;
-            //construction des matchs dans un round
+            //si on a plus de joueurs, on arrete la boucle
             if (typeof Joueurs[t] === 'undefined' && typeof Joueurs[t + 1] === 'undefined') {
                 break;
             }
+            //construction des matchs dans un round
+            //on récupère les joeurs qui se suivent dans la liste
             joueur1 = Joueurs[t];
             joueur2 = Joueurs[t + 1];
             let Match = {
@@ -58,6 +66,7 @@ for (i = closestKnownBracket; i !== 1; i = i / 2) {
                 pm2: null,
                 hasWinner: true
             };
+            //on met dans le tableau du round en cours un match identifié par son numéro de match
             matches[nbRound][noMatch] = Match;
             idMatch++;
             noMatch++;
@@ -66,12 +75,13 @@ for (i = closestKnownBracket; i !== 1; i = i / 2) {
     } else {
         previousRoundNbMatch = previousRound.length;
         for (let t = 1; t < previousRoundNbMatch; t += 2) {
-            //construction des matchs en fonction des matchs précédent
             let JoueursMatch = [];
-            // console.log(matches[nbRound -1][noMatch]);
+
+            //récupération des matchs précédent
+            //on va récupère ces match en fonction du numéro du match en cours -> si on est au match n°2, on va récupèrer le match numéro 3 et 4 du round précédent
             previousM1 = previousRound[noMatch * 2];
             previousM2 = previousRound[(noMatch * 2) - 1];
-            //récupération des joueurs gagnants
+            //récupération des joueurs gagnants des matchs précédents
             if (previousM1 && previousM1.hasWinner === true) {
                 let joueurWinnerPM = previousM1.joueurs.find(function (j) {
                     return j.isWinner;
