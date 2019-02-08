@@ -42,7 +42,7 @@ export default class Tournament {
     for (let index = 2; index < e.target.length-1; index++) {
 
       this.addPlayer({
-        id : index-2,
+        id : index-1,
         name : e.target[index].value
       })
     }

@@ -42,16 +42,23 @@ export default class Form {
         // On ajoute le select pour le type de tournoi
         let div = document.createElement('div');
         let select = document.createElement('select');
+        select.className = 'form-control mb-2';
         select.innerHTML += `<option value="classique"> -- Choisir un type de tournoi -- </option><option value="classique"> Classique </option><option value="poule"> Poule </option><option value="suisse"> Suisse </option>`;
         div.appendChild(select);
         this.formPlayers.appendChild(div);
 
         div = document.createElement('div');
-        div.innerHTML += `<label>Avec Score</label>`;
+        div.className = 'form-control mb-2';
         let score = document.createElement('input');
+        score.className = 'col-6';
         score.type = 'checkbox'
         score.value = '1'
+        let label = document.createElement('label');
+        label.className = 'col-3';
+        label.innerText = "Avec Score"
+        div.appendChild(label)
         div.appendChild(score);
+
         this.formPlayers.appendChild(div);
 
         for (let index = 0; index < nb; index++) {
