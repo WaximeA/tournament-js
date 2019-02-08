@@ -1,24 +1,24 @@
 let nbRound = 1;
 let Joueurs = [
-    {id: 0, name: "1"},
+    {id: 0, name: "1", isWinner: true},
     {id: 1, name: "2"},
-    {id: 2, name: "3"},
+    {id: 2, name: "3", isWinner: true},
     {id: 3, name: "4"},
-    {id: 4, name: "5"},
-    {id: 5, name: "6"},
+    {id: 4, name: "5", isWinner: true},
+    {id: 5, name: "6", isWinner: true},
     {id: 6, name: "7"},
-    {id: 7, name: "8"},
+    {id: 7, name: "8", isWinner: true},
     {id: 8, name: "9"},
-    {id: 9, name: "10"},
+    {id: 9, name: "10", isWinner: true},
     {id: 10, name: "11"},
-    {id: 11, name: "12"},
+    {id: 11, name: "12", isWinner: true},
     {id: 12, name: "13"},
-    {id: 13, name: "14"},
+    {id: 13, name: "14", isWinner: true},
     {id: 14, name: "15"},
-    {id: 15, name: "16"},
+    {id: 15, name: "16", isWinner: true},
     {id: 16, name: "17"},
-    {id: 17, name: "18"},
-    {id: 18, name: "19"}
+    {id: 17, name: "18", isWinner: true},
+    {id: 18, name: "19", isWinner: true}
 ];
 let nbJoueur = Joueurs.length;
 const knownBrackets = [2, 4, 8, 16, 32, 64];
@@ -29,35 +29,76 @@ let matches = [];
 let idMatch = 0;
 let previousM1 = null;
 let previousM2 = null;
+let previousRoundNbMatch = null;
 for (i = closestKnownBracket; i !== 1; i = i / 2) {
-    //construction nombre de round
-    nbRound++;
-    matches[nbRound] = [];
-    let diff = nbJoueur - i;
-    let noMatch = 1;
-    for (t = 0; t < i; t += 2) {
-        //construction des matchs dans un round
-        if (typeof Joueurs[t] === 'undefined' && typeof Joueurs[t + 1] === 'undefined') {
-            break;
-        }
-        if (nbRound !== 1) {
-            // console.log(matches[nbRound -1][noMatch]);
-            previousM1 = matches[nbRound-1][noMatch*2];
-            console.log(noMatch*2);
-            previousM2 = matches[nbRound-1][(noMatch*2)-1];
-            console.log(previousM1);
-        }
-        let Match = {
-            id: idMatch,
-            j1: Joueurs[t],
-            j2: Joueurs[t + 1],
-            pm1: previousM1,
-            pm2: previousM2,
-        };
-        idMatch++;
-        noMatch++;
-        matches[nbRound][noMatch] = Match;
+    let previousRound = null;
+    if (nbRound !== 1) {
+        previousRound = matches[nbRound - 1];
     }
+    let noMatch = 1;
+    matches[nbRound] = [];
+    if (nbRound === 1) {
+        for (let t = 0; t < i; t += 2) {
+            let joueur1 = null;
+            let joueur2 = null;
+            //construction des matchs dans un round
+            if (typeof Joueurs[t] === 'undefined' && typeof Joueurs[t + 1] === 'undefined') {
+                break;
+            }
+            joueur1 = Joueurs[t];
+            joueur2 = Joueurs[t + 1];
+            let Match = {
+                id: idMatch,
+                noMatch: noMatch,
+                joueurs: [
+                    joueur1,
+                    joueur2
+                ],
+                pm1: null,
+                pm2: null,
+                hasWinner: true
+            };
+            matches[nbRound][noMatch] = Match;
+            idMatch++;
+            noMatch++;
+            previousRoundNbMatch = noMatch;
+        }
+    } else {
+        previousRoundNbMatch = previousRound.length;
+        for (let t = 1; t < previousRoundNbMatch; t += 2) {
+            //construction des matchs en fonction des matchs précédent
+            let JoueursMatch = [];
+            // console.log(matches[nbRound -1][noMatch]);
+            previousM1 = previousRound[noMatch * 2];
+            previousM2 = previousRound[(noMatch * 2) - 1];
+            //récupération des joueurs gagnants
+            if (previousM1 && previousM1.hasWinner === true) {
+                let joueurWinnerPM = previousM1.joueurs.find(function (j) {
+                    return j.isWinner;
+                });
+                JoueursMatch.push(joueurWinnerPM);
+            }
+            if (previousM2 && previousM2.hasWinner === true) {
+                let joueurWinnerPM = previousM2.joueurs.find(function (j) {
+                    return j.isWinner;
+                });
+                JoueursMatch.push(joueurWinnerPM);
+            }
+            let Match = {
+                id: idMatch,
+                noMatch: noMatch,
+                joueurs: JoueursMatch,
+                pm1: previousM1,
+                pm2: previousM2,
+                hasWinner: false
+            };
+            matches[nbRound][noMatch] = Match;
+            noMatch++;
+            idMatch++;
+            previousRoundNbMatch = noMatch;
+        }
+    }
+    nbRound++;
 }
 // console.log(nbRound);
-// console.log(matches[2][0]);
+console.log(matches);
