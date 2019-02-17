@@ -1,7 +1,9 @@
 import Player from './Player.js'
 import Options from './Options.js'
-import Bracket from './Bracket.js'
+import Match from './Match.js'
 import Form  from './Form.js'
+
+const knownBrackets = [2, 4, 8, 16, 32, 64];
 
 export default class Tournament {
   constructor(players, options) {
@@ -13,7 +15,7 @@ export default class Tournament {
       type : "classique"
     }
 
-    this.brackets = []
+    this.matches = [];
     this.nbBrackets = 0
 
     this.form = new Form()
@@ -47,6 +49,8 @@ export default class Tournament {
         name : e.target[index].value
       })
     }
+    this.createMatches();
+    console.log(this.matches);
   }
 
   display() {
@@ -55,19 +59,84 @@ export default class Tournament {
     }
   }
 
-  createBracket() {
-    //on doit calculer le nb de bracket necessaire
-    this.nbBrackets = this.calcNbBracket()
-    //on push autant de bracket que necessaire
-    for (let i = 0; i < this.nbBrackets; i++) {
-      this.brackets.push(new Bracket(/*firstPlayer, secondPlayer, options*/))
+  createMatches() {
+    let nbRound = 1;
+    let nbJoueur = this.players.length;
+    let closestKnownBracket = knownBrackets.find(function (elem) {
+      return elem >= nbJoueur;
+    });
+    let matches = [];
+//l'id des matchs sera différents entre tous les matchs jusqu'à la finale
+    let idMatch = 0;
+    let previousM1 = null;
+    let previousM2 = null;
+    let previousRoundNbMatch = null;
+//cette boucle permet de créer le bon nombre de match à chaque fois, en divisant par deux le nombre de match à chaque nouveau round
+    for (let i = closestKnownBracket; i !== 1; i = i / 2) {
+      let previousRound = null;
+      if (nbRound !== 1) {
+        previousRound = matches[nbRound - 1];
+      }
+      let noMatch = 1;
+      matches[nbRound] = [];
+
+      //la construction du premier round est différente puisqu'on utilise la liste des joueurs et pas la liste des matchs précédents
+      if (nbRound === 1) {
+        //Création des matchs en 1v1 -> on fait +2 à chaque itération pour récupèrer deux joueurs
+        for (let t = 0; t < i; t += 2) {
+          let joueur1 = null;
+          let joueur2 = null;
+          //si on a plus de joueurs, on arrete la boucle
+          if (typeof this.players[t] === 'undefined' && typeof this.players[t + 1] === 'undefined') {
+            break;
+          }
+          //construction des matchs dans un round
+          //on récupère les joeurs qui se suivent dans la liste
+          joueur1 = this.players[t];
+          joueur2 = this.players[t + 1];
+          let match = new Match(idMatch, noMatch, [
+              joueur1,
+              joueur2
+            ], null, null, false);
+          //on met dans le tableau du round en cours un match identifié par son numéro de match
+          matches[nbRound][noMatch] = match;
+          idMatch++;
+          noMatch++;
+          previousRoundNbMatch = noMatch;
+        }
+      } else {
+        previousRoundNbMatch = previousRound.length;
+        for (let t = 1; t < previousRoundNbMatch; t += 2) {
+          let JoueursMatch = [];
+
+          //récupération des matchs précédent
+          //on va récupère ces match en fonction du numéro du match en cours -> si on est au match n°2, on va récupèrer le match numéro 3 et 4 du round précédent
+          previousM1 = previousRound[noMatch * 2];
+          previousM2 = previousRound[(noMatch * 2) - 1];
+          //récupération des joueurs gagnants des matchs précédents
+          if (previousM1 && previousM1.hasWinner === true) {
+            let joueurWinnerPM = previousM1.joueurs.find(function (j) {
+              //a changer
+              return j.isWinner;
+            });
+            JoueursMatch.push(joueurWinnerPM);
+          }
+          if (previousM2 && previousM2.hasWinner === true) {
+            let joueurWinnerPM = previousM2.joueurs.find(function (j) {
+              //a changer
+              return j.isWinner;
+            });
+            JoueursMatch.push(joueurWinnerPM);
+          }
+          let match = new Match(idMatch, noMatch, JoueursMatch, previousM1, previousM2, false);
+          matches[nbRound][noMatch] = match;
+          noMatch++;
+          idMatch++;
+        }
+      }
+      nbRound++;
     }
+    this.matches = matches;
   }
-
-  calcNbBracket() {
-    //on calcule le nb de bracket en fonction du nb de joueurs
-  }
-
-
 
 }

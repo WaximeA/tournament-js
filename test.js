@@ -1,25 +1,4 @@
 let nbRound = 1;
-let Joueurs = [
-    {id: 0, name: "1", isWinner: true},
-    {id: 1, name: "2"},
-    {id: 2, name: "3", isWinner: true},
-    {id: 3, name: "4"},
-    {id: 4, name: "5", isWinner: true},
-    {id: 5, name: "6", isWinner: true},
-    {id: 6, name: "7"},
-    {id: 7, name: "8", isWinner: true},
-    {id: 8, name: "9"},
-    {id: 9, name: "10", isWinner: true},
-    {id: 10, name: "11"},
-    {id: 11, name: "12", isWinner: true},
-    {id: 12, name: "13"},
-    {id: 13, name: "14", isWinner: true},
-    {id: 14, name: "15"},
-    {id: 15, name: "16", isWinner: true},
-    {id: 16, name: "17"},
-    {id: 17, name: "18", isWinner: true},
-    {id: 18, name: "19", isWinner: true}
-];
 let nbJoueur = Joueurs.length;
 const knownBrackets = [2, 4, 8, 16, 32, 64];
 let closestKnownBracket = knownBrackets.find(function (elem) {
@@ -105,10 +84,8 @@ for (i = closestKnownBracket; i !== 1; i = i / 2) {
             matches[nbRound][noMatch] = Match;
             noMatch++;
             idMatch++;
-            previousRoundNbMatch = noMatch;
         }
     }
     nbRound++;
 }
-// console.log(nbRound);
 console.log(matches);
