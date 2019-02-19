@@ -1,0 +1,65 @@
+@font-face {
+    font-family: 'Work Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Work Sans Light'), local('WorkSans-Light'), url(https://fonts.gstatic.com/s/worksans/v3/QGYpz_wNahGAdqQ43Rh314L8lthI.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Work Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Work Sans'), local('WorkSans-Regular'), url(https://fonts.gstatic.com/s/worksans/v3/QGYsz_wNahGAdqQ43Rh_cqDs.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Work Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: local('Work Sans SemiBold'), local('WorkSans-SemiBold'), url(https://fonts.gstatic.com/s/worksans/v3/QGYpz_wNahGAdqQ43Rh3o4T8lthI.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Work Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Work Sans Bold'), local('WorkSans-Bold'), url(https://fonts.gstatic.com/s/worksans/v3/QGYpz_wNahGAdqQ43Rh3x4X8lthI.ttf) format('truetype');
+}
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+html {
+    font-size: 15px;
+}
+@media (min-width: 38em) {
+    html {
+        font-size: 14px;
+    }
+}
+@media (min-width: 52em) {
+    html {
+        font-size: 15px;
+    }
+}
+@media (min-width: 72em) {
+    html {
+        font-size: 16px;
+    }
+}
+body {
+    background-color: #f1f1f1;
+    font-family: 'Work Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+h1,
+h2 {
+    text-align: center;
+}
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5em;
+}
+h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 2em;
+}
