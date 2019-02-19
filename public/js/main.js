@@ -1,5 +1,5 @@
-import Tournament from './modules/Tournament.js'
-import { type_check } from "./modules/Common.js";
+import Tournament from '../../modules/Tournament.js'
+import { type_check } from "../../modules/Common.js";
 
 let tournament = new Tournament()
 
