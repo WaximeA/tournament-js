@@ -23,7 +23,6 @@ let players = document.getElementById("players")
 players.onsubmit = function (e) {
   // TODO : vérifier si les champs sont des texts
   for (let index = 2; index < e.target.length-1; index++) {
-    console.log(e.target[index].value)
     if(e.target[index].value == ""){
       alert("Un ou plusieurs joueurs n'ont pas de nom...");
       return false;
@@ -32,8 +31,7 @@ players.onsubmit = function (e) {
 
   // TODO : vérifier si les champs sont des texts
   tournament.buildTournament(e)
-  console.log(tournament)
-  //tournament.createBracket() // TODO
+  tournament.createBracket(tournament)
   return false
 };
 

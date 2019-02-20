@@ -50,7 +50,6 @@ export default class Tournament {
       })
     }
     this.createMatches();
-    console.log(this.matches);
   }
 
   display() {
@@ -139,4 +138,85 @@ export default class Tournament {
     this.matches = matches;
   }
 
+  createBracket(tournament) {
+
+    Promise
+    .resolve()
+    .then(() => {
+      let root = document.getElementById('root');
+      console.log(tournament);
+      console.log(tournament.matches.length);
+      for (let index = 1; index <= tournament.matches.length-1; index++) {
+        root.innerHTML += '<p>manche '+index+'</p>';
+        console.log(tournament.matches[index]);
+        console.log(tournament.matches[index].length);
+        for (let index2 = 1; index2 <= tournament.matches[index].length-1; index2++) {
+          root.innerHTML += '<p><i>match '+index2+'</i></p>';
+        }
+      }
+    })
+
+    // Promise
+    // .resolve()
+    // .then(() => {
+    //   let root = document.getElementById('root');
+    //   let skeletonBracket =
+    //       '<div class="container-bracket">\n' +
+    //       '  <h1>Responsive Tournament Bracket</h1>\n' +
+    //       '  <h2>Ice hockey at the 1998 Winter Olympics – Men\'s tournament</h2>\n' +
+    //       '  <div class="tournament-bracket tournament-bracket--rounded">' +
+    //       '    <div class="tournament-bracket__round tournament-bracket__round--quarterfinals">\n' +
+    //       '      <h3 class="tournament-bracket__round-title">Quarterfinals</h3>\n' +
+    //       '      <div class="tournament-bracket__list">'+
+    //       '      </div>' +
+    //       '    </div>' +
+    //       '   </div>' +
+    //       '</div>';
+    //   let matchesNumber = tournament.matches.length;
+    //   let bracketList = document.getElementsByClassName('tournament-bracket__list');
+    //
+    //   // Display bracket head
+    //   root.innerHTML = skeletonBracket;
+    //
+    //   // Display each matches
+    //   for (let index = 1; index <= matchesNumber; index++) {
+    //     bracketList[0].innerHTML +=
+    //         '           <div class="tournament-bracket__item">\n' +
+    //         '              <div class="tournament-bracket__match" tabindex="0">\n' +
+    //         '                <table class="tournament-bracket__table">\n' +
+    //         '                  <caption class="tournament-bracket__caption">\n' +
+    //         '                    <time datetime="1998-02-18">18 February 1998</time>\n' +
+    //         '                  </caption>\n' +
+    //         '                  <thead class="sr-only">\n' +
+    //         '                    <tr>\n' +
+    //         '                      <th>Country</th>\n' +
+    //         '                      <th>Score</th>\n' +
+    //         '                    </tr>\n' +
+    //         '                  </thead>\n' +
+    //         '                  <tbody class="tournament-bracket__content">\n' +
+    //         '                    <tr class="tournament-bracket__team tournament-bracket__team--winner">\n' +
+    //         '                      <td class="tournament-bracket__country">\n' +
+    //         '                        <abbr class="tournament-bracket__code" title="Canada">CAN</abbr>\n' +
+    //         '                        <span class="tournament-bracket__flag flag-icon flag-icon-ca" aria-label="Flag"></span>\n' +
+    //         '                      </td>\n' +
+    //         '                      <td class="tournament-bracket__score">\n' +
+    //         '                        <span class="tournament-bracket__number">4</span>\n' +
+    //         '                      </td>\n' +
+    //         '                    </tr>\n' +
+    //         '                    <tr class="tournament-bracket__team">\n' +
+    //         '                      <td class="tournament-bracket__country">\n' +
+    //         '                        <abbr class="tournament-bracket__code" title="Kazakhstan">KAZ</abbr>\n' +
+    //         '                        <span class="tournament-bracket__flag flag-icon flag-icon-kz" aria-label="Flag"></span>\n' +
+    //         '                      </td>\n' +
+    //         '                      <td class="tournament-bracket__score">\n' +
+    //         '                        <span class="tournament-bracket__number">1</span>\n' +
+    //         '                      </td>\n' +
+    //         '                    </tr>\n' +
+    //         '                  </tbody>\n' +
+    //         '                </table>\n' +
+    //         '              </div>\n' +
+    //         '            </div>';
+    //   }
+    // })
+  }
 }
