@@ -190,6 +190,19 @@ export default class Tournament {
         }
         bracketContainer.appendChild(roundContainer);
        }
+
+       // Winner container
+      let winnerRound = document.createElement('div');
+      winnerRound.className = 'round winner';
+      let winnerMatchup = document.createElement('div');
+      winnerMatchup.className = 'matchup winner';
+      let winnerPlayer = document.createElement('div');
+      winnerPlayer.textContent = 'No winner yet';
+      winnerPlayer.className = 'player winner';
+      winnerMatchup.appendChild(winnerPlayer);
+      winnerRound.appendChild(winnerMatchup);
+      bracketContainer.appendChild(winnerRound);
+
        root.append(bracketContainer);
        console.log(bracketContainer);
     })
