@@ -162,11 +162,11 @@ export default class Tournament {
           matchupContainer.className = 'matchup matchup-'+index2;
 
           // Chaque joueur
-          for (let index3 = 1; index3 <= matchup.joueurs.length; index3++) {
+          for (let index3 = 0; index3 < matchup.joueurs.length; index3++) {
             let playerContainer = document.createElement('div');
-            let player = matchup.joueurs[index];
+            let player = matchup.joueurs[index3];
             playerContainer.className = 'player player-'+index3;
-            if (player){ // @todo Problème quand y'a 5j, les deux derniers veulent pas s'afficher
+            if (player){
               playerContainer.textContent = player.name;
             } else {
               playerContainer.textContent ='Wating for a winner.';
