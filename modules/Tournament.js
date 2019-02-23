@@ -203,7 +203,8 @@ export default class Tournament {
       winnerRound.appendChild(winnerMatchup);
       bracketContainer.appendChild(winnerRound);
 
-       root.append(bracketContainer);
+       // root.append(bracketContainer);
+       root.replaceWith(bracketContainer);
        console.log(bracketContainer);
     })
   }
