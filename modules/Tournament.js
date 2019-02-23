@@ -159,7 +159,7 @@ export default class Tournament {
         for (let index2 = 1; index2 < round.length; index2++) {
           let matchup = round[index2];
           let matchupContainer = document.createElement('div');
-          matchupContainer.className = 'matchup matchup-'+index2;
+          matchupContainer.className = 'matchup matchup-'+ matchup.id;
 
           // Chaque joueur
           if (matchup.joueurs.length > 0) {
