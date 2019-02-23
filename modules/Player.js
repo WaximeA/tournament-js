@@ -1,8 +1,8 @@
 export default class Player {
-    constructor(id, name) {
+    constructor(id, name, isWinner = false) {
         this.id = id;
         this.name = name;
-        this.isWinner = false;
+        this.isWinner = isWinner;
     }
 
     display() {

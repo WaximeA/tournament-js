@@ -5,6 +5,9 @@ import Form  from './Form.js'
 
 const knownBrackets = [2, 4, 8, 16, 32, 64];
 
+// @todo fonction à ajouter un helper avec des fonctions globales.
+function isOdd(num) { return num % 2;}
+
 export default class Tournament {
   constructor(players, options) {
 
@@ -24,10 +27,10 @@ export default class Tournament {
 
   /**
    * Ajouter un joueur au tableau
-   * @param {*} player : id et nom du joueur
+   * @param {*} player : id, nom du joueur et s'il est vainqueur
    */
   addPlayer(player) {
-    this.players.push(new Player(player.id, player.name))
+    this.players.push(new Player(player.id, player.name, player.isPlayerWinner))
   }
 
   /**
@@ -43,10 +46,15 @@ export default class Tournament {
 
     // Pour chaque input, on ajoute le joueur en question
     for (let index = 2; index < e.target.length-1; index++) {
+      let isPlayerWinner = false;
+      if (isOdd(e.target.length-1) && index === e.target.length-2) {
+        isPlayerWinner = true;
+      }
 
       this.addPlayer({
         id : index-1,
-        name : e.target[index].value
+        name : e.target[index].value,
+        isPlayerWinner : isPlayerWinner
       })
     }
     this.createMatches();
@@ -93,10 +101,16 @@ export default class Tournament {
           //on récupère les joeurs qui se suivent dans la liste
           joueur1 = this.players[t];
           joueur2 = this.players[t + 1];
+
+          let matchHasWinner = false;
+          if (joueur1.isWinner || joueur2.isWinner) {
+            matchHasWinner = true;
+          }
+
           let match = new Match(idMatch, noMatch, [
               joueur1,
               joueur2
-            ], null, null, false);
+            ], null, null, matchHasWinner);
           //on met dans le tableau du round en cours un match identifié par son numéro de match
           matches[nbRound][noMatch] = match;
           idMatch++;
