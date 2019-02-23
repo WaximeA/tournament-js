@@ -181,12 +181,13 @@ export default class Tournament {
               let playerContainer = document.createElement('div');
               let previousPlayer = matchup.joueurs[index3-1];
               let player = matchup.joueurs[index3];
-              playerContainer.className = 'player player-'+index3;
               if (player){
+                playerContainer.className = 'player player-' + player.id;
                 playerContainer.textContent = player.name;
               } else {
                 // Déclaration du joueur gagnant si aucun opposant
                 previousPlayer.isWinner = true;
+                playerContainer.className = 'player player-undefined';
                 playerContainer.textContent = 'no opponent';
               }
               matchupContainer.appendChild(playerContainer);
