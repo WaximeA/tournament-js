@@ -162,17 +162,29 @@ export default class Tournament {
           matchupContainer.className = 'matchup matchup-'+index2;
 
           // Chaque joueur
-          for (let index3 = 0; index3 < matchup.joueurs.length; index3++) {
-            let playerContainer = document.createElement('div');
-            let player = matchup.joueurs[index3];
-            playerContainer.className = 'player player-'+index3;
-            if (player){
-              playerContainer.textContent = player.name;
-            } else {
-              playerContainer.textContent ='Wating for a winner.';
+          if (matchup.joueurs.length > 0) {
+            for (let index3 = 0; index3 < matchup.joueurs.length; index3++) {
+              let playerContainer = document.createElement('div');
+              let previousPlayer = matchup.joueurs[index3-1];
+              let player = matchup.joueurs[index3];
+              playerContainer.className = 'player player-'+index3;
+              if (player){
+                playerContainer.textContent = player.name;
+              } else {
+                // Déclaration du joueur gagnant si aucun opposant
+                previousPlayer.isWinner = true;
+                playerContainer.textContent = 'no opponent';
+              }
+              matchupContainer.appendChild(playerContainer);
             }
-
-            matchupContainer.appendChild(playerContainer);
+          } else {
+            // Definition des match en attente
+            for (let index4 = 1; index4 < 3 ; index4++) {
+              let pendingPlayerContainer = document.createElement('div');
+              pendingPlayerContainer.className = 'player pending-player';
+              pendingPlayerContainer.textContent = 'Pending player.';
+              matchupContainer.appendChild(pendingPlayerContainer);
+            }
           }
           roundContainer.appendChild(matchupContainer)
         }
