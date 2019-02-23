@@ -60,8 +60,8 @@
 
 }
 .player.winner {
-  background: #df5a49;
-  color: #334d5c;
+  background: #FFF176;
+  border-color: #fad674;
 }
 .player.loser {
   background: #df5a49;
