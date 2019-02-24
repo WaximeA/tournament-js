@@ -30,6 +30,14 @@ export default class Tournament {
     this.players.push(new Player(player.id, player.name))
   }
 
+
+  /**
+   * Mélange l'ordre des joueurs dans le tableau
+   */
+  shufflePlayers(){
+   this.players.sort( () => Math.random() - 0.5)
+  }
+
   /**
    * Fonction utilisée pour construire le tournoi
    * à partir des inputs du formulaire
@@ -49,6 +57,7 @@ export default class Tournament {
         name : e.target[index].value
       })
     }
+    this.shufflePlayers();
     this.createMatches();
     console.log(this.matches);
   }
