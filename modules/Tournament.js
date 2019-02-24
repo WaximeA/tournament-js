@@ -30,12 +30,25 @@ export default class Tournament {
     this.players.push(new Player(player.id, player.name))
   }
 
-
   /**
    * Mélange l'ordre des joueurs dans le tableau
    */
-  shufflePlayers(){
-   this.players.sort( () => Math.random() - 0.5)
+  shufflePlayers() {
+    var currentPlayerIndex = this.players.length, tmpValue, randomIndex;
+  
+    // Tant qu'il reste des joueurs a mélanger...
+    while (0 !== currentPlayerIndex) {
+  
+      // On en prend un...
+      randomIndex = Math.floor(Math.random() * currentPlayerIndex);
+      currentPlayerIndex -= 1;
+  
+      // On le mélange avec le joueur courant.
+      tmpValue = this.players[currentPlayerIndex];
+      this.players[currentPlayerIndex] = this.players[randomIndex];
+      this.players[randomIndex] = tmpValue;
+    }
+
   }
 
   /**
