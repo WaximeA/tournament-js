@@ -162,24 +162,24 @@ export default class Tournament {
       bracketContainer.className = 'bracket';
 
       // Chaque round
-      for (let index = 1; index < bracket.length; index++) {
-        let round = bracket[index];
+      for (let roundIndex = 1; roundIndex < bracket.length; roundIndex++) {
+        let round = bracket[roundIndex];
         let roundContainer = document.createElement('div');
-        roundContainer.className = 'round round-' + index;
+        roundContainer.className = 'round round-' + roundIndex;
 
         // Chaque match
-        for (let index2 = 1; index2 < round.length; index2++) {
-          let matchup = round[index2];
+        for (let matchupIndex = 1; matchupIndex < round.length; matchupIndex++) {
+          let matchup = round[matchupIndex];
           let matchupContainer = document.createElement('div');
           matchupContainer.className = 'matchup matchup-' + matchup.id;
 
           // Chaque joueur
           if (matchup.joueurs.length > 0) {
             // Test seulement pour le premier round
-            if (index === 1) {
-              for (let index3 = 0; index3 < 2; index3++) {
+            if (roundIndex === 1) {
+              for (let playerIndex = 0; playerIndex < 2; playerIndex++) {
                 let playerContainer = document.createElement('div');
-                let player = matchup.joueurs[index3];
+                let player = matchup.joueurs[playerIndex];
                 if (player) {
                   // Affichage du joueur
                   playerContainer.className = 'player player-' + player.id;
@@ -202,7 +202,7 @@ export default class Tournament {
           // else {
           //   // Definition des match en attente
           //   if (!matchup.joueurs.length > 0) {
-          //   for (let index4 = 1; index4 < 3; index4++) {
+          //   for (let pendingPlayerIndex = 1; pendingPlayerIndex < 3; pendingPlayerIndex++) {
           //     let pendingPlayerContainer = document.createElement('div');
           //     pendingPlayerContainer.className = 'player pending-player';
           //     pendingPlayerContainer.textContent = 'Pending player.';
