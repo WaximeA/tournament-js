@@ -91,27 +91,32 @@ export default class Tournament {
         for (let t = 0; t < i; t += 2) {
           let joueur1 = null;
           let joueur2 = null;
-          //si on a plus de joueurs, on arrete la boucle
+          //si on a plus de joueurs,
+          // On met un match vide pour compléter
           if (typeof this.players[t] === 'undefined' &&
               typeof this.players[t + 1] === 'undefined') {
-            break;
+            let emptyMatch = new Match(idMatch, noMatch, [null, null], null, null, true);
+            matches[nbRound][noMatch] = emptyMatch;
           }
-          //construction des matchs dans un round
-          //on récupère les joeurs qui se suivent dans la liste
-          joueur1 = this.players[t];
-          joueur2 = this.players[t + 1];
+          else{
+            //construction des matchs dans un round
+            //on récupère les joeurs qui se suivent dans la liste
+            joueur1 = this.players[t];
+            joueur2 = this.players[t + 1];
 
-          let matchHasWinner = false;
-          if (joueur1.isWinner || joueur2.isWinner) {
-            matchHasWinner = true;
+            let matchHasWinner = false;
+            if (joueur1.isWinner || joueur2.isWinner) {
+              matchHasWinner = true;
+            }
+
+            let match = new Match(idMatch, noMatch, [
+              joueur1,
+              joueur2,
+            ], null, null, matchHasWinner);
+            matches[nbRound][noMatch] = match;
           }
 
-          let match = new Match(idMatch, noMatch, [
-            joueur1,
-            joueur2,
-          ], null, null, matchHasWinner);
           //on met dans le tableau du round en cours un match identifié par son numéro de match
-          matches[nbRound][noMatch] = match;
           idMatch++;
           noMatch++;
           previousRoundNbMatch = noMatch;
@@ -126,22 +131,44 @@ export default class Tournament {
           previousM1 = previousRound[noMatch * 2];
           previousM2 = previousRound[(noMatch * 2) - 1];
           //récupération des joueurs gagnants des matchs précédents
+
           if (previousM1 && previousM1.hasWinner === true) {
             let joueurWinnerPM = previousM1.joueurs.find(function(j) {
               //a changer
-              return j.isWinner;
+
+              if(j)
+                return j.isWinner;
+              else{
+                return true
+              }
+
             });
             JoueursMatch.push(joueurWinnerPM);
           }
           if (previousM2 && previousM2.hasWinner === true) {
             let joueurWinnerPM = previousM2.joueurs.find(function(j) {
               //a changer
-              return j.isWinner;
+              if(j)
+                return j.isWinner;
+              else
+                return true
             });
             JoueursMatch.push(joueurWinnerPM);
           }
+
+          let matchHasWinner = false;
+
+          if(JoueursMatch.length > 1) {
+            // On a un vainqueur
+            let player = (JoueursMatch[0] == null) ? JoueursMatch[1] : JoueursMatch[0]
+            if(!player) matchHasWinner = false
+            else if(player.isWinner) {
+              matchHasWinner = true;
+            }
+          }
+
           let match = new Match(idMatch, noMatch, JoueursMatch, previousM1,
-              previousM2, false);
+              previousM2, matchHasWinner);
           matches[nbRound][noMatch] = match;
           noMatch++;
           idMatch++;
@@ -172,7 +199,6 @@ export default class Tournament {
           let matchup = round[matchupIndex];
           let matchupContainer = document.createElement('div');
           matchupContainer.className = 'matchup matchup-' + matchup.id;
-
           // Chaque joueur
           if (matchup.joueurs.length > 0) {
             // Test seulement pour le premier round
@@ -192,27 +218,71 @@ export default class Tournament {
                 matchupContainer.appendChild(playerContainer);
               }
             } else {
+              // Si le match a déjà un vainqueur, on créer la div avec ce dernier
               if (isPreviousMatcheshHasWinner(matchup)){
-                // Ici il faudrait récupérer les vainqueur de chaque match précédent
+                let player1 = matchup.joueurs[1]
+                let player2 = matchup.joueurs[0]
+                let playerContainer = document.createElement('div');
+                if(player1){
+                  playerContainer.className = 'player player-' + player1.id;
+                  playerContainer.textContent = player1.name;
+                }
+                else{
+                  playerContainer.className = 'player pending-player';
+                  playerContainer.textContent = 'Pending player.';
+                }
+                matchupContainer.appendChild(playerContainer);
+                let playerContainer2 = document.createElement('div');
+                if(player2){
+                  playerContainer2.className = 'player player-' + player2.id;
+                  playerContainer2.textContent = player2.name;
+                }
+                else{
+                  playerContainer2.className = 'player pending-player';
+                  playerContainer2.textContent = 'Pending player.';
+                }
+                matchupContainer.appendChild(playerContainer2);
+
+                // Si on a un vainqueur dans la
+                if(player1) {
+                  bracket[roundIndex+1][1].joueurs = [player1]
+                }
+              }
+              else {
+                // Dans tous les autres cas, on met une div pending
+                let pendingPlayerContainer = document.createElement('div');
+                pendingPlayerContainer.className = 'player pending-player';
+                pendingPlayerContainer.textContent = 'Pending player.';
+                matchupContainer.appendChild(pendingPlayerContainer);
+
+                let pendingPlayerContainer2 = document.createElement('div');
+                pendingPlayerContainer2.className = 'player pending-player';
+                pendingPlayerContainer2.textContent = 'Pending player.';
+                matchupContainer.appendChild(pendingPlayerContainer2);
+
               }
             }
           }
           // A décommenter pour voir la génération de l'abre OK avec un nombre de participant pair.
           // Ca ne fonctionne pas avec un nombre de participant impaire
-          // else {
-          //   // Definition des match en attente
-          //   if (!matchup.joueurs.length > 0) {
-          //   for (let pendingPlayerIndex = 1; pendingPlayerIndex < 3; pendingPlayerIndex++) {
-          //     let pendingPlayerContainer = document.createElement('div');
-          //     pendingPlayerContainer.className = 'player pending-player';
-          //     pendingPlayerContainer.textContent = 'Pending player.';
-          //     matchupContainer.appendChild(pendingPlayerContainer);
-          // }}}
+          else {
+            // Definition des match en attente
+            if (!matchup.joueurs.length > 0) {
+              for (let pendingPlayerIndex = 1; pendingPlayerIndex < 3; pendingPlayerIndex++) {
+                let pendingPlayerContainer = document.createElement('div');
+                pendingPlayerContainer.className = 'player pending-player';
+                pendingPlayerContainer.textContent = 'Pending player.';
+                matchupContainer.appendChild(pendingPlayerContainer);
+              }
+            }
 
+          }
+          console.log(matchupContainer)
           // Ajout du match au round courrant
           roundContainer.appendChild(matchupContainer);
         }
         // Ajout du round au bracket
+
         bracketContainer.appendChild(roundContainer);
       }
 
@@ -222,7 +292,6 @@ export default class Tournament {
       // Aout du brakket au container ou remplacement du container
       // root.append(bracketContainer);
       root.replaceWith(bracketContainer);
-      console.log(bracketContainer);
     });
   }
 }
