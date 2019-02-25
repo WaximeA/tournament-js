@@ -1,7 +1,10 @@
-import Tournament from './modules/Tournament.js'
-import { type_check } from "./modules/Common.js";
+import Tournament from '../../modules/Tournament.js'
+import { type_check } from "../../modules/Common.js";
 
 let tournament = new Tournament()
+
+
+let auto = document.getElementById("auto")gt
 
 let formNbPlayers = document.getElementById("nbPlayers")
 
@@ -23,7 +26,6 @@ let players = document.getElementById("players")
 players.onsubmit = function (e) {
   // TODO : vérifier si les champs sont des texts
   for (let index = 2; index < e.target.length-1; index++) {
-    console.log(e.target[index].value)
     if(e.target[index].value == ""){
       alert("Un ou plusieurs joueurs n'ont pas de nom...");
       return false;
@@ -32,10 +34,20 @@ players.onsubmit = function (e) {
 
   // TODO : vérifier si les champs sont des texts
   tournament.buildTournament(e)
-  console.log(tournament)
-  //tournament.createBracket() // TODO
+  tournament.createBracket(tournament)
   return false
 };
+
+auto.onclick = function (e) {
+  let nb = document.getElementById("nb").value = 8
+  const nbPlayers = parseInt(document.getElementById('nb').value);
+  tournament.form.createForm(nbPlayers)
+ // players.submit()
+  tournament.buildTournament(e)
+  tournament.createBracket(tournament)
+  return false
+};
+
 
 
 
