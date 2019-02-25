@@ -3,6 +3,9 @@ import { type_check } from "../../modules/Common.js";
 
 let tournament = new Tournament()
 
+
+let auto = document.getElementById("auto")gt
+
 let formNbPlayers = document.getElementById("nbPlayers")
 
 formNbPlayers.onsubmit = function () {
@@ -34,6 +37,17 @@ players.onsubmit = function (e) {
   tournament.createBracket(tournament)
   return false
 };
+
+auto.onclick = function (e) {
+  let nb = document.getElementById("nb").value = 8
+  const nbPlayers = parseInt(document.getElementById('nb').value);
+  tournament.form.createForm(nbPlayers)
+ // players.submit()
+  tournament.buildTournament(e)
+  tournament.createBracket(tournament)
+  return false
+};
+
 
 
 

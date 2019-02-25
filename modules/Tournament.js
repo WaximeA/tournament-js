@@ -95,7 +95,7 @@ export default class Tournament {
           // On met un match vide pour compléter
           if (typeof this.players[t] === 'undefined' &&
               typeof this.players[t + 1] === 'undefined') {
-            let emptyMatch = new Match(idMatch, noMatch, [null, null], null, null, true);
+            let emptyMatch = new Match(idMatch, noMatch, [null, null], null, null, true, nbRound);
             matches[nbRound][noMatch] = emptyMatch;
           }
           else{
@@ -112,7 +112,7 @@ export default class Tournament {
             let match = new Match(idMatch, noMatch, [
               joueur1,
               joueur2,
-            ], null, null, matchHasWinner);
+            ], null, null, matchHasWinner, nbRound);
             matches[nbRound][noMatch] = match;
           }
 
@@ -168,7 +168,7 @@ export default class Tournament {
           }
 
           let match = new Match(idMatch, noMatch, JoueursMatch, previousM1,
-              previousM2, matchHasWinner);
+              previousM2, matchHasWinner, nbRound);
           matches[nbRound][noMatch] = match;
           noMatch++;
           idMatch++;
@@ -180,12 +180,11 @@ export default class Tournament {
   }
 
   createBracket(tournament) {
-    console.log(tournament);
-
     Promise.resolve().then(() => {
       let root = document.getElementById('root');
       let bracket = tournament.matches;
       let bracketContainer = document.createElement('div');
+      bracketContainer.id = 'bracket';
       bracketContainer.className = 'bracket';
 
       // Chaque round
@@ -210,6 +209,10 @@ export default class Tournament {
                   // Affichage du joueur
                   playerContainer.className = 'player player-' + player.id;
                   playerContainer.textContent = player.name;
+                  playerContainer.onclick = function (e) {
+                    win(player, matchup, tournament)
+                    this.onclick=null;
+                  };
                 } else {
                   // Affichage d'un message comme quoi il n'y a pas d'opposant
                   playerContainer.className = 'player player-undefined';
@@ -222,10 +225,15 @@ export default class Tournament {
               if (isPreviousMatcheshHasWinner(matchup)){
                 let player1 = matchup.joueurs[1]
                 let player2 = matchup.joueurs[0]
+
                 let playerContainer = document.createElement('div');
                 if(player1){
                   playerContainer.className = 'player player-' + player1.id;
                   playerContainer.textContent = player1.name;
+                  playerContainer.onclick = function (e) {
+                    win(player1, matchup, tournament)
+                    this.onclick=null;
+                  };
                 }
                 else{
                   playerContainer.className = 'player pending-player';
@@ -236,6 +244,10 @@ export default class Tournament {
                 if(player2){
                   playerContainer2.className = 'player player-' + player2.id;
                   playerContainer2.textContent = player2.name;
+                  playerContainer2.onclick = function (e) {
+                    win(player2, matchup, tournament)
+                    this.onclick=null;
+                  };
                 }
                 else{
                   playerContainer2.className = 'player pending-player';
@@ -249,16 +261,41 @@ export default class Tournament {
                 }
               }
               else {
-                // Dans tous les autres cas, on met une div pending
-                let pendingPlayerContainer = document.createElement('div');
-                pendingPlayerContainer.className = 'player pending-player';
-                pendingPlayerContainer.textContent = 'Pending player.';
-                matchupContainer.appendChild(pendingPlayerContainer);
+                let playerContainer1 = document.createElement('div');
+                let playerContainer2 = document.createElement('div');
 
-                let pendingPlayerContainer2 = document.createElement('div');
-                pendingPlayerContainer2.className = 'player pending-player';
-                pendingPlayerContainer2.textContent = 'Pending player.';
-                matchupContainer.appendChild(pendingPlayerContainer2);
+                // Si un joueur a gagné, on le met dans la div
+                if(matchup.joueurs[0]) {
+                  playerContainer1.className = 'player player-' + matchup.joueurs[0].id;
+                  playerContainer1.textContent = matchup.joueurs[0].name;
+                  matchup.joueurs[0].isWinner = false
+                  playerContainer1.onclick = function (e) {
+                    win(matchup.joueurs[0], matchup, tournament)
+                    this.onclick=null;
+                  };
+                }
+                else {
+                  playerContainer1.className = 'player pending-player';
+                  playerContainer1.textContent = 'Pending player.';
+                }
+
+                if(matchup.joueurs[1]) {
+                  playerContainer2.className = 'player player-' + matchup.joueurs[1].id;
+                  playerContainer2.textContent = matchup.joueurs[1].name;
+                  matchup.joueurs[1].isWinner = false
+                  playerContainer2.onclick = function (e) {
+                    win(matchup.joueurs[1], matchup, tournament)
+                    this.onclick=null;
+                  };
+                }
+                else {
+                  playerContainer2.className = 'player pending-player';
+                  playerContainer2.textContent = 'Pending player.';
+                }
+
+                matchupContainer.appendChild(playerContainer1);
+                matchupContainer.appendChild(playerContainer2);
+
 
               }
             }
@@ -275,9 +312,8 @@ export default class Tournament {
                 matchupContainer.appendChild(pendingPlayerContainer);
               }
             }
-
           }
-          console.log(matchupContainer)
+
           // Ajout du match au round courrant
           roundContainer.appendChild(matchupContainer);
         }
@@ -290,8 +326,11 @@ export default class Tournament {
       getWinnerContainer(bracketContainer);
 
       // Aout du brakket au container ou remplacement du container
-      // root.append(bracketContainer);
-      root.replaceWith(bracketContainer);
+      let actualBrackets = document.getElementById('bracket');
+      //
+
+      if(actualBrackets) actualBrackets.replaceWith(bracketContainer);
+      else root.replaceWith(bracketContainer);
     });
   }
 }
@@ -308,6 +347,7 @@ function getWinnerContainer(bracketContainer) {
   winnerRound.className = 'round winner';
   winnerMatchup.className = 'matchup winner';
   winnerPlayer.className = 'player winner';
+  winnerPlayer.setAttribute("id", "winner");
   winnerPlayer.textContent = 'No winner yet';
   // Ajout des divs au bracket
   winnerMatchup.appendChild(winnerPlayer);
@@ -327,4 +367,30 @@ function isPreviousMatcheshHasWinner(matchup) {
   }
 
   return isPreviousMatcheshHasWinner;
+}
+
+function win(player, matchup, tournament) {
+  // Le match est fini, on ne fait rien
+  if(matchup.isFinished) return;
+  matchup.isFinished = true;
+  // Dernier round, on a un vainqueur
+  if(!tournament.matches[matchup.round+1]){
+    let divWinner = document.getElementById("winner")
+    divWinner.textContent = player.name
+    alert(`Bravo à ${player.name} qui remporte ce tournoi !`)
+  }
+  // Sinon, on fait monter le vainqueur
+  else {
+    tournament.matches[matchup.round+1].forEach(match => {
+
+      if(match.previousMatch1.id == matchup.id || match.previousMatch2.id == matchup.id){
+        // On va garder le bon ordre des joueurs
+        if(!match.joueurs[0]) match.joueurs.unshift(player)
+        else  match.joueurs.push(player)
+        return false
+      }
+    });
+    // On met à jour le bracket
+    tournament.createBracket(tournament)
+  }
 }
