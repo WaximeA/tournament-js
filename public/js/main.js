@@ -4,7 +4,7 @@ import { type_check } from "../../modules/Common.js";
 let tournament = new Tournament()
 
 
-let auto = document.getElementById("auto")gt
+let auto = document.getElementById("auto")
 
 let formNbPlayers = document.getElementById("nbPlayers")
 
