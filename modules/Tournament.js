@@ -32,6 +32,27 @@ export default class Tournament {
   }
 
   /**
+   * Mélange l'ordre des joueurs dans le tableau
+   */
+  shufflePlayers() {
+    var currentPlayerIndex = this.players.length, tmpValue, randomIndex;
+  
+    // Tant qu'il reste des joueurs a mélanger...
+    while (0 !== currentPlayerIndex) {
+  
+      // On en prend un...
+      randomIndex = Math.floor(Math.random() * currentPlayerIndex);
+      currentPlayerIndex -= 1;
+  
+      // On le mélange avec le joueur courant.
+      tmpValue = this.players[currentPlayerIndex];
+      this.players[currentPlayerIndex] = this.players[randomIndex];
+      this.players[randomIndex] = tmpValue;
+    }
+
+  }
+
+  /**
    * Fonction utilisée pour construire le tournoi
    * à partir des inputs du formulaire
    * @param {e} target html
@@ -55,6 +76,7 @@ export default class Tournament {
         isPlayerWinner: isPlayerWinner,
       });
     }
+    this.shufflePlayers();
     this.createMatches();
   }
 
