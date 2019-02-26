@@ -7,7 +7,6 @@ const knownBrackets = [2, 4, 8, 16, 32, 64];
 
 export default class Tournament {
   constructor(players, options) {
-
     this.players = [];
 
     this.options = {
@@ -20,7 +19,55 @@ export default class Tournament {
 
     this.form = new Form();
     this.form.initForm();
+    this.initModal();
   }
+
+  /**
+   * Génere la modal pour l'affichage du vainqueur
+   */
+  initModal(){
+
+    // Crée le bouton qui sert de lien pour allumer la modal ( on ne l'affichera pas a l'écran)
+    let hiddenModalStarter = document.createElement('a');
+    hiddenModalStarter.setAttribute("href", "#winner-modal");
+    hiddenModalStarter.className = 'hidden-button';
+    hiddenModalStarter.textContent = '';
+
+    // Ajout du bouton
+    document.body.appendChild(hiddenModalStarter);
+
+    // Création de la fenetre modal
+    let modalWindow = document.createElement('div');
+    modalWindow.setAttribute("id", "winner-modal");
+    modalWindow.className = 'modal-window';
+
+    // Création du conteneur des éléments dans la modal
+    let modalDiv = document.createElement('div')
+    modalWindow.appendChild(modalDiv);
+
+    // Création du bouton pour fermer la modal
+    let closeButton = document.createElement('a')
+    closeButton.setAttribute("href", "#");
+    closeButton.setAttribute("title", "Close");
+    closeButton.className = 'modal-close';
+    closeButton.textContent = `X`;
+    modalDiv.appendChild(closeButton);
+
+    // Création du titre de la modal
+    let modalTitle=document.createElement('h1');
+    modalTitle.setAttribute("id","modal-title");
+    modalDiv.appendChild(modalTitle);
+    
+    // Création du texte de la modal
+    let modalText = document.createElement('div');
+    modalText.setAttribute("id","modal-text");
+    modalDiv.appendChild(modalText)
+
+    //On ajoute la modal (non visible) dans la page
+    document.body.appendChild(modalWindow);
+    
+  }
+
 
   /**
    * Ajouter un joueur au tableau
@@ -397,9 +444,17 @@ function win(player, matchup, tournament) {
   matchup.isFinished = true;
   // Dernier round, on a un vainqueur
   if(!tournament.matches[matchup.round+1]){
+
+    // On change l'URL pour afficher la modal
+    (location.href.slice(-1) === '#') ? location.href=location.href+'winner-modal' : location.href+="#winner-modal";
+    // Modification des infos dans la modal
+    let divModalTitle = document.getElementById("modal-title") ;
+    let divModalText = document.getElementById("modal-text") ;
+    divModalTitle.textContent = "Résultats finaux";
+    divModalText.textContent = `Bravo à ${player.name} qui remporte ce tournoi !`;
+    
     let divWinner = document.getElementById("winner")
-    divWinner.textContent = player.name
-    alert(`Bravo à ${player.name} qui remporte ce tournoi !`)
+    divWinner.textContent = player.name;
   }
   // Sinon, on fait monter le vainqueur
   else {
