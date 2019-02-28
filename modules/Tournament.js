@@ -127,12 +127,6 @@ export default class Tournament {
     this.createMatches();
   }
 
-  display() {
-    for (bracket in this.brackets) {
-      bracket.display(this.options);
-    }
-  }
-
   createMatches() {
     let nbRound = 1;
     let nbJoueur = this.players.length;
@@ -462,8 +456,15 @@ function win(player, matchup, tournament) {
 
       if(match.previousMatch1.id == matchup.id || match.previousMatch2.id == matchup.id){
         // On va garder le bon ordre des joueurs
-        if(!match.joueurs[0]) match.joueurs.unshift(player)
-        else  match.joueurs.push(player)
+        //si pair
+        if (matchup.numeroMatch%2 === 0) {
+          if (!match.joueurs[0]) {
+            match.joueurs[0] = null;
+          }
+          match.joueurs[1] = player;
+        } else {
+          match.joueurs[0] = player;
+        }
         return false
       }
     });
