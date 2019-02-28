@@ -126,6 +126,7 @@ export default class Tournament {
     }
     this.shufflePlayers();
     this.createMatches();
+    console.log(this)
   }
 
   createMatches() {

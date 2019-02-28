@@ -2,7 +2,6 @@ import Tournament from '../../modules/Tournament.js'
 
 let tournament = new Tournament()
 
-
 let auto = document.getElementById("auto")
 
 let formNbPlayers = document.getElementById("nbPlayers")
@@ -44,6 +43,8 @@ auto.onclick = function (e) {
  // players.submit()
   tournament.buildTournament(e)
   tournament.createBracket(tournament)
+
+
   return false
 };
 
