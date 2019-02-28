@@ -248,7 +248,8 @@ export default class Tournament {
     this.matches = matches;
   }
 
-  createBracket(tournament) {
+  createBracket() {
+    let tournament = this;
     Promise.resolve().then(() => {
       let root = document.getElementById('root');
       let bracket = tournament.matches;
@@ -468,6 +469,6 @@ function win(player, matchup, tournament) {
       }
     });
     // On met à jour le bracket
-    tournament.createBracket(tournament)
+    tournament.createBracket()
   }
 }
