@@ -1,4 +1,5 @@
 import Tournament from '../../modules/Tournament.js'
+import Helper from '../../modules/Common.js';
 
 let tournament = new Tournament()
 
@@ -10,7 +11,7 @@ formNbPlayers.onsubmit = function () {
 
   const nbPlayers = parseInt(document.getElementById('nb').value);
   // TODO : Vérifier si le nombre de joueur est bon
-  if (HelperProto.type_check(nbPlayers, { type: "number" }) && nbPlayers > 1 && !(isNaN(nbPlayers))) {
+  if (Helper.type_check(nbPlayers, { type: "number" }) && nbPlayers > 1 && !(isNaN(nbPlayers))) {
     tournament.form.createForm(nbPlayers)
   }
   else {

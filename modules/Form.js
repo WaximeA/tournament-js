@@ -41,7 +41,7 @@ export default class Form {
 
         // On ajoute le select pour le type de tournoi
         let div = document.createElement('div');
-        let select = document.createElement('select');
+       /* let select = document.createElement('select');
         select.className = 'form-control mb-2';
         select.innerHTML += `<option value="classique"> -- Choisir un type de tournoi -- </option><option value="classique"> Classique </option><option value="poule"> Poule </option><option value="suisse"> Suisse </option>`;
         div.appendChild(select);
@@ -58,7 +58,7 @@ export default class Form {
         label.innerText = "Avec Score"
         div.appendChild(label)
         div.appendChild(score);
-
+*/
         this.formPlayers.appendChild(div);
 
         for (let index = 0; index < nb; index++) {

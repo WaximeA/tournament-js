@@ -112,7 +112,7 @@ export default class Tournament {
     this.options.score = e.target[1].checked;
 
     // Pour chaque input, on ajoute le joueur en question
-    for (let index = 2; index < e.target.length - 1; index++) {
+    for (let index = 0; index < e.target.length - 1; index++) {
       let isPlayerWinner = false;
       if (Helper.isOdd(e.target.length - 1) && index === e.target.length - 2) {
         isPlayerWinner = true;
@@ -170,10 +170,16 @@ export default class Tournament {
             joueur2 = this.players[t + 1];
 
             let matchHasWinner = false;
-            if (joueur1.isWinner || joueur2.isWinner) {
-              matchHasWinner = true;
+            if(joueur1){
+              if (joueur1.isWinner) {
+                matchHasWinner = true;
+              }
             }
-
+            if(joueur2){
+              if (joueur2.isWinner) {
+                matchHasWinner = true;
+              }
+            }
             let match = new Match(idMatch, noMatch, [
               joueur1,
               joueur2,
