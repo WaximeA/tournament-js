@@ -2,6 +2,7 @@ import Player from './Player.js';
 import Options from './Options.js';
 import Match from './Match.js';
 import Form from './Form.js';
+import Helper from './Common.js';
 
 const knownBrackets = [2, 4, 8, 16, 32, 64];
 
@@ -57,7 +58,7 @@ export default class Tournament {
     let modalTitle=document.createElement('h1');
     modalTitle.setAttribute("id","modal-title");
     modalDiv.appendChild(modalTitle);
-    
+
     // Création du texte de la modal
     let modalText = document.createElement('div');
     modalText.setAttribute("id","modal-text");
@@ -65,7 +66,7 @@ export default class Tournament {
 
     //On ajoute la modal (non visible) dans la page
     document.body.appendChild(modalWindow);
-    
+
   }
 
 
@@ -83,14 +84,14 @@ export default class Tournament {
    */
   shufflePlayers() {
     var currentPlayerIndex = this.players.length, tmpValue, randomIndex;
-  
+
     // Tant qu'il reste des joueurs a mélanger...
     while (0 !== currentPlayerIndex) {
-  
+
       // On en prend un...
       randomIndex = Math.floor(Math.random() * currentPlayerIndex);
       currentPlayerIndex -= 1;
-  
+
       // On le mélange avec le joueur courant.
       tmpValue = this.players[currentPlayerIndex];
       this.players[currentPlayerIndex] = this.players[randomIndex];
@@ -113,7 +114,7 @@ export default class Tournament {
     // Pour chaque input, on ajoute le joueur en question
     for (let index = 2; index < e.target.length - 1; index++) {
       let isPlayerWinner = false;
-      if (isOdd(e.target.length - 1) && index === e.target.length - 2) {
+      if (Helper.isOdd(e.target.length - 1) && index === e.target.length - 2) {
         isPlayerWinner = true;
       }
 
@@ -125,12 +126,6 @@ export default class Tournament {
     }
     this.shufflePlayers();
     this.createMatches();
-  }
-
-  display() {
-    for (bracket in this.brackets) {
-      bracket.display(this.options);
-    }
   }
 
   createMatches() {
@@ -405,9 +400,6 @@ export default class Tournament {
   }
 }
 
-// TODO FONCTIONS CI-DESSOUS A METTRE DANS UN HELPER POUR QUE CA SOIT PLUS PROPRE
-function isOdd(num) { return num % 2;}
-
 function getWinnerContainer(bracketContainer) {
   // Création du round, matchup et player gagnant
   let winnerRound = document.createElement('div');
@@ -453,7 +445,7 @@ function win(player, matchup, tournament) {
     let divModalText = document.getElementById("modal-text") ;
     divModalTitle.textContent = "Résultats finaux";
     divModalText.textContent = `Bravo à ${player.name} qui remporte ce tournoi !`;
-    
+
     let divWinner = document.getElementById("winner")
     divWinner.textContent = player.name;
   }
@@ -463,8 +455,15 @@ function win(player, matchup, tournament) {
 
       if(match.previousMatch1.id == matchup.id || match.previousMatch2.id == matchup.id){
         // On va garder le bon ordre des joueurs
-        if(!match.joueurs[0]) match.joueurs.unshift(player)
-        else  match.joueurs.push(player)
+        //si pair
+        if (!Helper.isOdd(matchup.numeroMatch)) {
+          if (!match.joueurs[0]) {
+            match.joueurs[0] = null;
+          }
+          match.joueurs[1] = player;
+        } else {
+          match.joueurs[0] = player;
+        }
         return false
       }
     });
