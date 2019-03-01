@@ -127,7 +127,6 @@ export default class Tournament {
     }
     //this.shufflePlayers();
     this.createMatches();
-    console.log(this)
   }
 
   createMatches() {
@@ -454,7 +453,7 @@ function win(player, matchup, tournament) {
     divModalTitle.textContent = "Résultats finaux";
 
     divModalText.textContent = `Bravo à ${prop_access(player,'name')} qui remporte ce tournoi !`;
-    
+
     let divWinner = document.getElementById("winner");
     divWinner.textContent = prop_access(player,'name');
   }
@@ -473,16 +472,12 @@ function win(player, matchup, tournament) {
           match.joueurs[1] = player;
         }
         else {
-          console.log(matchup.round+1)
-          console.log(tournament.matches[matchup.round+1][i].joueurs) // 1 joueur
           tournament.matches[matchup.round+1][i].joueurs.push(player)
-          console.log(tournament.matches[matchup.round+1][i].joueurs) // 2 joueurs
         }
         return false
       }
     });
     // On met à jour le bracket
-    console.log(tournament.matches[matchup.round+1]) // 1 joueur ????????
     tournament.createBracket()
   }
 }
