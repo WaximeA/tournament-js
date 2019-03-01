@@ -68,6 +68,8 @@ export default class Form {
           input.className = 'form-control mb-2';
           // On lui met comme nom players + l'id du tableau
           input.setAttribute('name', `players[${index+1}]`);
+          input.setAttribute('id', `players[${index+1}]`);
+          input.setAttribute('value', `Joueur ${index+1}`); // Test
           input.setAttribute('placeholder', `Nom du joueur ${index+1}`);
 
           // On ajoute tout ça au formulaire
