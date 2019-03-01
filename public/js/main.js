@@ -4,6 +4,7 @@ import Helper from '../../modules/Common.js';
 let tournament = new Tournament()
 
 let auto = document.getElementById("auto")
+let log = document.getElementById("log")
 
 let formNbPlayers = document.getElementById("nbPlayers")
 
@@ -47,6 +48,10 @@ auto.onclick = function (e) {
 
 
   return false
+};
+
+log.onclick = function (e) {
+  console.log(tournament)
 };
 
 

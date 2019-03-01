@@ -112,7 +112,7 @@ export default class Tournament {
     this.options.score = e.target[1].checked;
 
     // Pour chaque input, on ajoute le joueur en question
-    for (let index = 0; index < e.target.length - 1; index++) {
+    for (let index = 2; index < e.target.length - 1; index++) {
       let isPlayerWinner = false;
       if (Helper.isOdd(e.target.length - 1) && index === e.target.length - 2) {
         isPlayerWinner = true;
@@ -124,7 +124,7 @@ export default class Tournament {
         isPlayerWinner: isPlayerWinner,
       });
     }
-    this.shufflePlayers();
+    //this.shufflePlayers();
     this.createMatches();
     console.log(this)
   }
@@ -327,7 +327,7 @@ export default class Tournament {
                 }
                 matchupContainer.appendChild(playerContainer2);
 
-                // Si on a un vainqueur dans la
+                // Si on a un vainqueur
                 if(player1) {
                   bracket[roundIndex+1][1].joueurs = [player1]
                 }
@@ -458,23 +458,29 @@ function win(player, matchup, tournament) {
   }
   // Sinon, on fait monter le vainqueur
   else {
-    tournament.matches[matchup.round+1].forEach(match => {
+    tournament.matches[matchup.round+1].forEach((match, i) => {
 
       if(match.previousMatch1.id == matchup.id || match.previousMatch2.id == matchup.id){
         // On va garder le bon ordre des joueurs
-        //si pair
+        //si pair$
         if (!Helper.isOdd(matchup.numeroMatch)) {
           if (!match.joueurs[0]) {
+
             match.joueurs[0] = null;
           }
           match.joueurs[1] = player;
-        } else {
-          match.joueurs[0] = player;
+        }
+        else {
+          console.log(matchup.round+1)
+          console.log(tournament.matches[matchup.round+1][i].joueurs) // 1 joueur
+          tournament.matches[matchup.round+1][i].joueurs.push(player)
+          console.log(tournament.matches[matchup.round+1][i].joueurs) // 2 joueurs
         }
         return false
       }
     });
     // On met à jour le bracket
+    console.log(tournament.matches[matchup.round+1]) // 1 joueur ????????
     tournament.createBracket()
   }
 }
