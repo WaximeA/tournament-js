@@ -4,8 +4,4 @@ export default class Player {
         this.name = name;
         this.isWinner = isWinner;
     }
-
-    display() {
-
-    }
 }
