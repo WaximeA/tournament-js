@@ -83,11 +83,9 @@ export function prop_access(object, path) {
             return null;
         }
     }
-    
+
     return object;
 }
-
-};
 
 HelperProto.prototype.isOdd = function (num) {
     return num % 2;
