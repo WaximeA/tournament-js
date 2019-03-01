@@ -2,6 +2,7 @@ import Player from './Player.js';
 import Options from './Options.js';
 import Match from './Match.js';
 import Form from './Form.js';
+import { prop_access } from './Common.js';
 
 const knownBrackets = [2, 4, 8, 16, 32, 64];
 
@@ -451,10 +452,10 @@ function win(player, matchup, tournament) {
     let divModalTitle = document.getElementById("modal-title") ;
     let divModalText = document.getElementById("modal-text") ;
     divModalTitle.textContent = "Résultats finaux";
-    divModalText.textContent = `Bravo à ${player.name} qui remporte ce tournoi !`;
+    divModalText.textContent = `Bravo à ${prop_access(player,'name')} qui remporte ce tournoi !`;
     
-    let divWinner = document.getElementById("winner")
-    divWinner.textContent = player.name;
+    let divWinner = document.getElementById("winner");
+    divWinner.textContent = prop_access(player,'name');
   }
   // Sinon, on fait monter le vainqueur
   else {

@@ -8,7 +8,7 @@ let auto = document.getElementById("auto")
 
 let formNbPlayers = document.getElementById("nbPlayers")
 
-formNbPlayers.onsubmit = function () {
+formNbPlayers.onsubmit = function (e) {
 
   const nbPlayers = parseInt(document.getElementById('nb').value);
   // TODO : Vérifier si le nombre de joueur est bon
@@ -16,7 +16,13 @@ formNbPlayers.onsubmit = function () {
     tournament.form.createForm(nbPlayers)
   }
   else {
-    alert('Nombre de joueurs incorrect (2 joueurs minimum)')
+    (location.href.slice(-1) === '#') ? location.href=location.href+'winner-modal' : location.href+="#winner-modal";
+    // Modification des infos dans la modal
+    let divModalTitle = document.getElementById("modal-title") ;
+    let divModalText = document.getElementById("modal-text") ;
+    divModalTitle.textContent = "Nombre de joueurs incorrect";
+    divModalText.textContent = `2 joueurs minimum`;
+    e.preventDefault();
   }
   return false
 };
