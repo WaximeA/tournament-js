@@ -3,6 +3,7 @@ import Options from './Options.js';
 import Match from './Match.js';
 import Form from './Form.js';
 import { prop_access } from './Common.js';
+import Helper from './Common.js';
 
 const knownBrackets = [2, 4, 8, 16, 32, 64];
 
@@ -58,7 +59,7 @@ export default class Tournament {
     let modalTitle=document.createElement('h1');
     modalTitle.setAttribute("id","modal-title");
     modalDiv.appendChild(modalTitle);
-    
+
     // Création du texte de la modal
     let modalText = document.createElement('div');
     modalText.setAttribute("id","modal-text");
@@ -66,7 +67,7 @@ export default class Tournament {
 
     //On ajoute la modal (non visible) dans la page
     document.body.appendChild(modalWindow);
-    
+
   }
 
 
@@ -84,14 +85,14 @@ export default class Tournament {
    */
   shufflePlayers() {
     var currentPlayerIndex = this.players.length, tmpValue, randomIndex;
-  
+
     // Tant qu'il reste des joueurs a mélanger...
     while (0 !== currentPlayerIndex) {
-  
+
       // On en prend un...
       randomIndex = Math.floor(Math.random() * currentPlayerIndex);
       currentPlayerIndex -= 1;
-  
+
       // On le mélange avec le joueur courant.
       tmpValue = this.players[currentPlayerIndex];
       this.players[currentPlayerIndex] = this.players[randomIndex];
@@ -114,7 +115,7 @@ export default class Tournament {
     // Pour chaque input, on ajoute le joueur en question
     for (let index = 2; index < e.target.length - 1; index++) {
       let isPlayerWinner = false;
-      if (isOdd(e.target.length - 1) && index === e.target.length - 2) {
+      if (Helper.isOdd(e.target.length - 1) && index === e.target.length - 2) {
         isPlayerWinner = true;
       }
 
@@ -124,14 +125,9 @@ export default class Tournament {
         isPlayerWinner: isPlayerWinner,
       });
     }
-    this.shufflePlayers();
+    //this.shufflePlayers();
     this.createMatches();
-  }
-
-  display() {
-    for (bracket in this.brackets) {
-      bracket.display(this.options);
-    }
+    console.log(this)
   }
 
   createMatches() {
@@ -175,10 +171,16 @@ export default class Tournament {
             joueur2 = this.players[t + 1];
 
             let matchHasWinner = false;
-            if (joueur1.isWinner || joueur2.isWinner) {
-              matchHasWinner = true;
+            if(joueur1){
+              if (joueur1.isWinner) {
+                matchHasWinner = true;
+              }
             }
-
+            if(joueur2){
+              if (joueur2.isWinner) {
+                matchHasWinner = true;
+              }
+            }
             let match = new Match(idMatch, noMatch, [
               joueur1,
               joueur2,
@@ -249,7 +251,8 @@ export default class Tournament {
     this.matches = matches;
   }
 
-  createBracket(tournament) {
+  createBracket() {
+    let tournament = this;
     Promise.resolve().then(() => {
       let root = document.getElementById('root');
       let bracket = tournament.matches;
@@ -325,7 +328,7 @@ export default class Tournament {
                 }
                 matchupContainer.appendChild(playerContainer2);
 
-                // Si on a un vainqueur dans la
+                // Si on a un vainqueur
                 if(player1) {
                   bracket[roundIndex+1][1].joueurs = [player1]
                 }
@@ -405,9 +408,6 @@ export default class Tournament {
   }
 }
 
-// TODO FONCTIONS CI-DESSOUS A METTRE DANS UN HELPER POUR QUE CA SOIT PLUS PROPRE
-function isOdd(num) { return num % 2;}
-
 function getWinnerContainer(bracketContainer) {
   // Création du round, matchup et player gagnant
   let winnerRound = document.createElement('div');
@@ -452,6 +452,7 @@ function win(player, matchup, tournament) {
     let divModalTitle = document.getElementById("modal-title") ;
     let divModalText = document.getElementById("modal-text") ;
     divModalTitle.textContent = "Résultats finaux";
+
     divModalText.textContent = `Bravo à ${prop_access(player,'name')} qui remporte ce tournoi !`;
     
     let divWinner = document.getElementById("winner");
@@ -459,16 +460,29 @@ function win(player, matchup, tournament) {
   }
   // Sinon, on fait monter le vainqueur
   else {
-    tournament.matches[matchup.round+1].forEach(match => {
+    tournament.matches[matchup.round+1].forEach((match, i) => {
 
       if(match.previousMatch1.id == matchup.id || match.previousMatch2.id == matchup.id){
         // On va garder le bon ordre des joueurs
-        if(!match.joueurs[0]) match.joueurs.unshift(player)
-        else  match.joueurs.push(player)
+        //si pair$
+        if (!Helper.isOdd(matchup.numeroMatch)) {
+          if (!match.joueurs[0]) {
+
+            match.joueurs[0] = null;
+          }
+          match.joueurs[1] = player;
+        }
+        else {
+          console.log(matchup.round+1)
+          console.log(tournament.matches[matchup.round+1][i].joueurs) // 1 joueur
+          tournament.matches[matchup.round+1][i].joueurs.push(player)
+          console.log(tournament.matches[matchup.round+1][i].joueurs) // 2 joueurs
+        }
         return false
       }
     });
     // On met à jour le bracket
-    tournament.createBracket(tournament)
+    console.log(tournament.matches[matchup.round+1]) // 1 joueur ????????
+    tournament.createBracket()
   }
 }

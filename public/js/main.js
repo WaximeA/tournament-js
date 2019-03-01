@@ -1,10 +1,10 @@
 import Tournament from '../../modules/Tournament.js'
-import { type_check } from "../../modules/Common.js";
+import Helper from '../../modules/Common.js';
 
 let tournament = new Tournament()
 
-
 let auto = document.getElementById("auto")
+let log = document.getElementById("log")
 
 let formNbPlayers = document.getElementById("nbPlayers")
 
@@ -12,7 +12,7 @@ formNbPlayers.onsubmit = function (e) {
 
   const nbPlayers = parseInt(document.getElementById('nb').value);
   // TODO : Vérifier si le nombre de joueur est bon
-  if (type_check(nbPlayers, { type: "number" }) && nbPlayers > 1 && !(isNaN(nbPlayers))) {
+  if (Helper.type_check(nbPlayers, { type: "number" }) && nbPlayers > 1 && !(isNaN(nbPlayers))) {
     tournament.form.createForm(nbPlayers)
   }
   else {
@@ -51,7 +51,13 @@ auto.onclick = function (e) {
  // players.submit()
   tournament.buildTournament(e)
   tournament.createBracket(tournament)
+
+
   return false
+};
+
+log.onclick = function (e) {
+  console.log(tournament)
 };
 
 
